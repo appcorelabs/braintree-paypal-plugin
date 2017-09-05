@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="braintree-paypal-plugin"
+        version="0.2.0">
+
+    <name>Braintree Plugin</name>
+
+    <description>
+        A Cordova plugin for the Braintree mobile payment processing SDK.
+    </description>
+
+    <license>MIT</license>
+
+    <!-- JavaScript Interface -->
+    <js-module src="www/braintree-plugin.js" name="BraintreePlugin">
+        <clobbers target="BraintreePlugin" />
+    </js-module>
+
+    <!-- Android Configuration -->
+    <platform name="android">
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="BraintreePlugin">
+                <param name="android-package" value="com.plugin.braintree.BraintreePlugin" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.braintreepayments.api.BraintreePaymentActivity" />
+            <activity android:name="com.braintreepayments.api.threedsecure.ThreeDSecureWebViewActivity" />
+            <activity android:launchMode="singleTask" android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="com.ezerapp.braintree" />
+                </intent-filter>
+            </activity>
+        </config-file>
+
+        <source-file src="src/android/BraintreePlugin.java" target-dir="src/com/plugin/braintree" />
+
+        <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
+
+    </platform>
+
+    <!-- iOS Configuration -->
+    <platform name="ios">
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="BraintreePlugin">
+                <param name="ios-package" value="BraintreePlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+              <dict>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                  <string>com.ezerapp.payments</string>
+                </array>
+              </dict>
+            </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+            <array>
+                <string>com.paypal.ppclient.touch.v1</string>
+                <string>com.paypal.ppclient.touch.v2</string>
+                <string>org-appextension-feature-password-management</string>
+            </array>
+        </config-file>
+
+        <header-file src="src/ios/BraintreePlugin.h" />
+        <source-file src="src/ios/BraintreePlugin.m" />
+        <!-- add in Embedded Binaries section manually target iOS 8+ -->
+       <!--  <framework src="lib/ios/BraintreePayPal.framework" custom="true" />
+        <framework src="lib/ios/BraintreeCore.framework" custom="true" /> -->
+    </platform>
+
+</plugin>
